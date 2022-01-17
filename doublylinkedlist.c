@@ -1,234 +1,236 @@
-#include<stdio.h>  
-#include<stdlib.h>  
-struct node  
-{  
-    struct node *prev;  
-    struct node *next;  
-    int data;  
-};  
-struct node *head;  
-void insertion_beginning();  
-void insertion_last();  
-void insertion_specified();  
-void deletion_beginning();  
-void deletion_last();  
-void deletion_specified();  
-void display();  
-void main ()  
-{  
-int choice =0;  
-    while(choice != 9)  
-    {  
-        
-        printf("\n1.Insert in begining\n2.Insert at last\n3.Insert at any random location\n4.Delete from Beginning\n5.Delete from last\n6.Delete the node from any position\n7.display\n8.Exit\n");  
-        printf("\nEnter your choice?\n");  
-        scanf("\n%d",&choice);  
-        switch(choice)  
-        {  
-            case 1:  
-            insertion_beginning();  
-            break;  
-            case 2:  
-                    insertion_last();  
-            break;  
-            case 3:  
-            insertion_specified();  
-            break;  
-            case 4:  
-            deletion_beginning();  
-            break;  
-            case 5:  
-            deletion_last();  
-            break;  
-            case 6:  
-            deletion_specified();  
-            break;  
-            case 7:  
-            display();  
-            break;   
-            case 8:  
-            exit(0);  
-            break;  
-            default:  
-            printf("Please enter valid choice..");  
-        }  
-    }  
-}  
-void insertion_beginning()  
-{  
-   struct node *ptr;   
-   int item;  
-   ptr = (struct node *)malloc(sizeof(struct node));  
-   if(ptr == NULL)  
-   {  
-       printf("\nOVERFLOW");  
-   }  
-   else  
-   {  
-    printf("\nEnter Item value");  
-    scanf("%d",&item);  
-      
-   if(head==NULL)  
-   {  
-       ptr->next = NULL;  
-       ptr->prev=NULL;  
-       ptr->data=item;  
-       head=ptr;  
-   }  
-   else   
-   {  
-       ptr->data=item;  
-       ptr->prev=NULL;  
-       ptr->next = head;  
-       head->prev=ptr;  
-       head=ptr;  
-   }  
-   printf("\nNode inserted\n");  
-}  
-     
-}  
-void insertion_last()  
-{  
-   struct node *ptr,*temp;  
-   int item;  
-   ptr = (struct node *) malloc(sizeof(struct node));  
-   if(ptr == NULL)  
-   {  
-       printf("\nOVERFLOW");  
-   }  
-   else  
-   {  
-       printf("\nEnter value");  
-       scanf("%d",&item);  
-        ptr->data=item;  
-       if(head == NULL)  
-       {  
-           ptr->next = NULL;  
-           ptr->prev = NULL;  
-           head = ptr;  
-       }  
-       else  
-       {  
-          temp = head;  
-          while(temp->next!=NULL)  
-          {  
-              temp = temp->next;  
-          }  
-          temp->next = ptr;  
-          ptr ->prev=temp;  
-          ptr->next = NULL;  
-          }  
-             
-       }  
-     printf("\nnode inserted\n");  
-    }  
-void insertion_specified()  
-{  
-   struct node *ptr,*temp;  
-   int item,loc,i;  
-   ptr = (struct node *)malloc(sizeof(struct node));  
-   if(ptr == NULL)  
-   {  
-       printf("\n OVERFLOW");  
-   }  
-   else  
-   {  
-       temp=head;  
-       printf("Enter the location");  
-       scanf("%d",&loc);  
-       for(i=0;i<loc;i++)  
-       {  
-           temp = temp->next;  
-           if(temp == NULL)  
-           {  
-               printf("\n There are less than %d elements", loc);  
-               return;  
-           }  
-       }  
-       printf("Enter value");  
-       scanf("%d",&item);  
-       ptr->data = item;  
-       ptr->next = temp->next;  
-       ptr -> prev = temp;  
-       temp->next = ptr;  
-       temp->next->prev=ptr;  
-       printf("\nnode inserted\n");  
-   }  
-}  
-void deletion_beginning()  
-{  
-    struct node *ptr;  
-    if(head == NULL)  
-    {  
-        printf("\n UNDERFLOW list empty");  
-    }  
-    else if(head->next == NULL)  
-    {  
-        head = NULL;   
-        free(head);  
-        printf("\nnode deleted\n");  
-    }  
-    else  
-    {  
-        ptr = head;  
-        head = head -> next;  
-        head -> prev = NULL;  
-        free(ptr);  
-        printf("\nnode deleted\n");  
-    }  
-  
-}  
-void deletion_last()  
-{  
-    struct node *ptr;  
-    if(head == NULL)  
-    {  
-        printf("\n UNDERFLOW list empty");  
-    }  
-    else if(head->next == NULL)  
-    {  
-        head = NULL;   
-        free(head);   
-        printf("\nnode deleted\n");  
-    }  
-    else   
-    {  
-        ptr = head;   
-        if(ptr->next != NULL)  
-        {  
-            ptr = ptr -> next;   
-        }  
-        ptr -> prev -> next = NULL;   
-        free(ptr);  
-        printf("\nnode deleted\n");  
-    }  
-}  
-void deletion_specified()  
-{  
-    struct node *ptr, *temp;  
-    int pos;  
-    printf("\n Enter the position from which the node is to be deleted : ");  
-    scanf("%d", &pos);  
-    ptr = head;
-    int i=1; 
-    while(i<pos-1){
-    ptr=ptr->next;
-    i++;
-    } 
-    temp = ptr -> next;  
-    ptr -> next = temp -> next;  
-    temp -> next -> prev = ptr;  
-    free(temp);  
-    printf("\nnode deleted\n"); 
-}  
-void display()  
-{  
-    struct node *ptr;  
-    printf("\n printing values...\n");  
-    ptr = head;  
-    while(ptr != NULL)  
-    {  
-        printf("%d\n",ptr->data);  
-        ptr=ptr->next;  
-    }  
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node
+{
+    struct node *prev;
+    int data;
+    struct node *next;
+} *start = NULL;
+
+void create(int value)
+{
+    struct node *temp, *q;
+    temp = malloc(sizeof(struct node));
+    temp->data = value;
+    temp->next = NULL;
+    if (start == NULL)
+    {
+        start = temp;
+    }
+    else
+    {
+        q = start;
+        while (q->next != NULL)
+        {
+            q = q->next;
+        }
+        q->next = temp;
+    }
+}
+
+void insert_at_begin(int value)
+{
+    struct node *temp;
+    temp = malloc(sizeof(struct node));
+    temp->data = value;
+    temp->next = start;
+    start->prev = temp;
+    start = temp;
+}
+
+void insert_at_middle(int pos, int value)
+{
+    struct node *q, *temp;
+    int count = 1;
+    temp = malloc(sizeof(struct node));
+    temp->data = value;
+    q = start;
+    while (count < pos - 1)
+    {
+        q = q->next;
+        count++;
+    }
+    temp->next = q->next;
+    temp->prev = q;
+    q->next = temp;
+}
+
+void insert_at_end(int value)
+{
+    struct node *q, *temp;
+    temp = malloc(sizeof(struct node));
+    temp->data = value;
+    temp->next = NULL;
+    q = start;
+    while (q->next != NULL)
+    {
+        q = q->next;
+    }
+    temp->prev = q;
+    q->next = temp;
+}
+
+void delete_begin()
+{
+    struct node *temp;
+    int value;
+    if (start == NULL)
+    {
+        printf("Linked list is empty\n");
+        return;
+    }
+    value = start->data;
+    printf("Deleted element is :%d\n", value);
+    temp = start;
+    start = temp->next;
+    temp->prev = NULL;
+    free(temp);
+}
+
+void delete_at_position(int pos)
+{
+    struct node *q, *temp;
+    int value, count = 1;
+    if (start == NULL)
+    {
+        printf("\nLinked list is empty\n");
+        return;
+    }
+    q = start;
+    if (pos == 1)
+    {
+        value = temp->data;
+        temp->prev = NULL;
+        start = temp->next;
+        printf("\nDeleted element is %d\n", value);
+        free(temp);
+        return;
+    }
+    while (count < pos - 1)
+    {
+        q = q->next;
+        count++;
+        if (q->next == NULL)
+        {
+            printf("\nGiven position is not present in the linked list\n");
+            return;
+        }
+    }
+    temp = q->next;
+    value = temp->data;
+    q->next = temp->next;
+    temp->next->prev = q;
+    printf("\nDeleted element is %d\n", value);
+    free(temp);
+}
+
+void delete_at_end()
+{
+    int value;
+    struct node *q, *temp;
+    if (start == NULL)
+    {
+        printf("\nLinked list is empty\n");
+        return;
+    }
+    q = start;
+    if (q->next == NULL)
+    {
+        temp = q;
+        start = NULL;
+    }
+    while (q->next != NULL)
+    {
+        temp = q;
+        q = q->next;
+    }
+    temp->next = NULL;
+    temp = q;
+    value = temp->data;
+    printf("\nDeleted element is :%d\n", value);
+    free(temp);
+    return;
+}
+
+void display()
+{
+    struct node *q;
+    q = start;
+    if (q == NULL)
+    {
+        printf("\nLinked list is empty\n");
+        return;
+    }
+    else
+    {
+        printf("\nLinked list elements are:\n");
+        while (q != NULL)
+        {
+            printf("%d\t", q->data);
+            q = q->next;
+        }
+        printf("\n");
+    }
+    return;
+}
+
+int main()
+{
+    int choice, num, value, pos;
+    printf("Enter your choice:");
+    while (1)
+    {
+        printf("\n1.Create a list\n2.Insert at beginning\n3.Insert at a position\n4.Insert at end\n5.Delete from beginning\n6.Delete from a specific position\n7.Delete from the end\n8.Display\n9.Exit\n");
+        scanf("%d", &choice);
+        switch (choice)
+        {
+        case 1:
+            printf("Enter the number of elements to be inserted:");
+            scanf("%d", &num);
+            for (int i = 0; i < num; i++)
+            {
+                printf("Enter the element:");
+                scanf("%d", &value);
+                create(value);
+            }
+            break;
+        case 2:
+            printf("Enter the data to be inserted:");
+            scanf("%d", &value);
+            insert_at_begin(value);
+            break;
+        case 3:
+            printf("Enter the position where data to be inserted:");
+            scanf("%d", &pos);
+            printf("Enter the data to be inserted:");
+            scanf("%d", &value);
+            insert_at_middle(pos, value);
+            break;
+        case 4:
+            printf("Enter the data to be inserted:");
+            scanf("%d", &value);
+            insert_at_end(value);
+            break;
+        case 5:
+            delete_begin();
+            break;
+        case 6:
+            printf("Enter the position where element to be deleted:");
+            scanf("%d", &pos);
+            delete_at_position(pos);
+            break;
+        case 7:
+            delete_at_end();
+            break;
+        case 8:
+            display();
+            break;
+        case 9:
+            exit(0);
+        default:
+            break;
+        }
+    }
+    return 0;
 }
